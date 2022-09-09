@@ -40,3 +40,4 @@ console.log(player);
 player.takeTurn();
 console.log(player);
 
+console.log(player);
