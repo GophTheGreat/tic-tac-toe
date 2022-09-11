@@ -1,16 +1,16 @@
 
 
-function Gameboard(){
+const Gameboard = (() => {
   let TicTacToeArray = [];
   for(let i = 1; i < 9; i++){
     console.log(`a${i}`);
     cell = document.getElementById(`a${i}`);
-    cell.addEventListener("click", function(){this.innerHTML = "x"})
+    cell.addEventListener("click", function(){placeMark()})
     TicTacToeArray.push(cell);
     console.log(TicTacToeArray);
   }
   return;
-}
+})();
 
 const playerFactory = () => {
   let turn = false;
@@ -28,8 +28,19 @@ const playerFactory = () => {
   // }
 };
 
+function placeMark (){
+  console.log('hi');
+}
+
+function checkVictory() {
+
+}
+
+function startGame(){
+
+}
+
 const player = playerFactory();
-const Gameboard1 = Gameboard();
 
 console.log(player);
 player.takeTurn();
