@@ -29,8 +29,13 @@ const gameboard = (() => {
   function checkVictory() {
 
   }
-  return;
+  return{
+    TicTacToeArray,
+    possibleWins
+  };
 })();
+
+console.log(gameboard.possibleWins);
 
 const main = (() => {
   //declare players
@@ -65,6 +70,10 @@ const main = (() => {
 
 
 function placeMark (){
+  if(this.innerHTML != ''){
+    console.log(`can't place in occupied cell!`);
+    return;
+  }
   //put a mark in the cell depending on which player's turn it is
   console.log(`Placing mark of ${main.currentPlayer.name}`);
   console.log(main.currentPlayer.mark);
@@ -73,8 +82,23 @@ function placeMark (){
   this.innerHTML = main.currentPlayer.mark;
   main.takeTurn();
   console.log(`Mark placed. Current player is now ${main.currentPlayer.name}`);
+  checkWinner();
 }
 
 function checkWinner(){
 
+
+  //for each of the win conditions
+  //check if all the possible cells match
+
+  for(let i = 0; i < gameboard.possibleWins.length; i++){
+    console.log(`checking combo ${i} cells ${gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML}, ${gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML}, and ${gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML}`);
+    if(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML != `` &&
+        gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML &&
+        gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML ){
+        console.log(`VICTORY OMG`);
+        alert(`VICTORY FOR ${gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML} player!`)
+    }
+  }
+  return;
 }
