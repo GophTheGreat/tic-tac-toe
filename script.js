@@ -8,6 +8,7 @@ const gameboard = (() => {
   let TicTacToeArray = [];
   console.log(`dasd`);
   for(let i = 1; i <= 9; i++){
+
     console.log(`a${i}`);
     cell = document.getElementById(`a${i}`);
     TicTacToeArray.push(cell);
@@ -47,8 +48,10 @@ const gameboard = (() => {
 
 const main = (() => {
   //declare players
-  const player1 = playerFactory('player1', 'X');
-  const player2 = playerFactory('player2', 'O');
+
+  let player1 = playerFactory('player1', document.getElementById(`p1`).value);
+  let player2 = playerFactory('player2', 'O');
+
 
   //initialize beginning state
   let currentPlayer = player1;
@@ -101,23 +104,29 @@ const main = (() => {
       console.log(`checking combo ${i} cells ${gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML}, ${gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML}, and ${gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML}`);
       if(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML != `` &&
           gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML &&
-          gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML ){
+          gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML){
           console.log(`VICTORY OMG`);
           alert(`VICTORY FOR ${gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML} player!`)
+          gameboard.reset();
       }
+    }
+    //check for tie
+    let tie = true;
+    gameboard.TicTacToeArray.forEach(function(element) {
+      if (element.innerHTML === '')
+        tie = false;
+    });
+    if(tie){
+      alert(`TIE`);
+      gameboard.reset();
     }
     return;
   }
-  
+
   return{
     currentPlayer,
     takeTurn,
     placeMark,
     checkWinner,
-  };
+  }
 })();
-
-
-
-
-
