@@ -38,6 +38,10 @@ const gameboard = (() => {
       cell = document.getElementById(`a${i}`);
       cell.innerHTML = '';
     }
+    let victoryDiv = document.getElementById('victoryContainer');
+    while (victoryDiv.firstChild){
+      victoryDiv.removeChild(victoryDiv.lastChild);
+    }
   }
 
   return{
