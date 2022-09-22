@@ -16,8 +16,8 @@ const gameboard = (() => {
   }
 
   //generate button
-  resetButton = document.getElementById(`resetButton`);
-  resetButton.addEventListener("click", reset);
+  startButton = document.getElementById(`startButton`);
+  startButton.addEventListener("click", reset);
 
   const possibleWins = [
     [0,1,2],
@@ -31,6 +31,7 @@ const gameboard = (() => {
   ];
 
   function reset(){
+    main.init();
     console.log(`Resetting`)
     for(let i = 1; i <= 9; i++){
       console.log(`a${i}`);
@@ -47,19 +48,33 @@ const gameboard = (() => {
 })();
 
 const main = (() => {
-  //declare players
 
-  let player1 = playerFactory('player1', document.getElementById(`p1`).value);
-  let player2 = playerFactory('player2', 'O');
+  let player1;
+  let player2;
+  let currentPlayer;
+
+  let victoryDiv = document.getElementById('victoryContainer');
+
+  let bindArray = [];
+  
+  function init(){
+    //declare players
+    player1 = playerFactory('player1', document.getElementById(`p1`).value);
+    player2 = playerFactory('player2', document.getElementById(`p2`).value);
+
+    //initialize beginning state
+    currentPlayer = player1;
+
+    //add listeners to all cells
+    gameboard.TicTacToeArray.forEach((element, i) => {
+      bindArray.push(placeMark.bind(element));
+      element.addEventListener("click", bindArray[i]);
+      console.log(element);
+    })
+  }
 
 
-  //initialize beginning state
-  let currentPlayer = player1;
 
-  gameboard.TicTacToeArray.forEach(element => {
-    element.addEventListener("click", placeMark.bind(element));
-    console.log(element);
-  })
 
   console.log(currentPlayer); 
   if(checkWinner()){
@@ -69,18 +84,18 @@ const main = (() => {
   function takeTurn(){
     checkWinner();
     console.log(`Taking turn. current Player: ${currentPlayer.name}`);
-    if (this.currentPlayer === player1){
-      this.currentPlayer = player2;
+    if (currentPlayer === player1){
+      currentPlayer = player2;
     }
     else{
-      this.currentPlayer = player1;
+      currentPlayer = player1;
     }
     console.log(`New current player: ${currentPlayer.name}`);
     console.log(`expected next mark: ${currentPlayer.mark}`);
     return;
   }
 
-  function placeMark (){
+  function placeMark(){
     console.log(`placing mark`)
     console.log(this);
     //no marks in occupied cells
@@ -89,12 +104,12 @@ const main = (() => {
       return;
     }
     //put a mark in the cell depending on which player's turn it is
-    console.log(`Placing mark of ${main.currentPlayer.name}`);
-    console.log(main.currentPlayer.mark);
-    this.innerHTML = main.currentPlayer.mark;
-    main.takeTurn();
-    console.log(`Mark placed. Current player is now ${main.currentPlayer.name}`);
-
+    console.log(`Placing mark of ${currentPlayer.name}`);
+    console.log(currentPlayer.mark);
+    this.innerHTML = currentPlayer.mark;
+    takeTurn();
+    console.log(`Mark placed. Current player is now ${currentPlayer.name}`);
+    return;
   }
 
   function checkWinner(){
@@ -103,11 +118,24 @@ const main = (() => {
     for(let i = 0; i < gameboard.possibleWins.length; i++){
       console.log(`checking combo ${i} cells ${gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML}, ${gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML}, and ${gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML}`);
       if(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML != `` &&
-          gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML &&
-          gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML){
-          console.log(`VICTORY OMG`);
-          alert(`VICTORY FOR ${gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML} player!`)
-          gameboard.reset();
+        gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML &&
+        gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML){
+        console.log(`VICTORY OMG`);
+        const victoryAnnouncement = document.createElement("div")
+        victoryAnnouncement.classList += 'victory';
+        victoryDiv.appendChild(victoryAnnouncement);
+        console.log(victoryDiv);
+        console.log(typeof(victoryDiv));
+        
+        
+        console.log(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML)
+        if(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === player1.mark){
+          victoryAnnouncement.innerHTML = `Player ${player1.mark} wins!`;
+        }
+        else{
+          victoryAnnouncement.innerHTML = `Player ${player2.mark} wins!`;
+        }
+        lockout();
       }
     }
     //check for tie
@@ -123,7 +151,17 @@ const main = (() => {
     return;
   }
 
+  function lockout(){
+    console.log('Locking out!')
+    //remove listeners to lock interaction for when a player wins
+    gameboard.TicTacToeArray.forEach((element, i) => {
+      element.removeEventListener("click", bindArray[i]);
+      console.log(`${element} locked!`)
+    })
+  }
+
   return{
+    init,
     currentPlayer,
     takeTurn,
     placeMark,
