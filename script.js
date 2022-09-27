@@ -12,6 +12,17 @@ const gameboard = (() => {
     console.log(`a${i}`);
     cell = document.getElementById(`a${i}`);
     TicTacToeArray.push(cell);
+    console.log(i);
+    if(i == '2'){
+      console.log('lessgo');
+      cell.classList.add('startBox');
+      let top = cell.appendChild(document.createElement('div'));
+      let bottom = cell.appendChild(document.createElement('div'));
+      top.classList.add('startText');
+      bottom.classList.add('startText');
+      top.innerHTML = "^"
+      bottom.innerHTML = "Click to start!"
+    }
     console.log(TicTacToeArray);
   }
 
@@ -36,7 +47,13 @@ const gameboard = (() => {
     for(let i = 1; i <= 9; i++){
       console.log(`a${i}`);
       cell = document.getElementById(`a${i}`);
+      if(i == '2'){
+        console.log('lessgo');
+        cell.classList.remove('startBox');
+      }
       cell.innerHTML = '';
+      cell.classList.remove('player1');
+      cell.classList.remove('player2');
     }
     let victoryDiv = document.getElementById('victoryContainer');
     while (victoryDiv.firstChild){
@@ -111,6 +128,13 @@ const main = (() => {
     console.log(`Placing mark of ${currentPlayer.name}`);
     console.log(currentPlayer.mark);
     this.innerHTML = currentPlayer.mark;
+    if(currentPlayer === player1){
+      this.classList.add('player1');
+    }
+    else{
+      this.classList.add('player2');
+    }
+
     takeTurn();
     console.log(`Mark placed. Current player is now ${currentPlayer.name}`);
     return;
@@ -125,32 +149,37 @@ const main = (() => {
         gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML &&
         gameboard.TicTacToeArray[gameboard.possibleWins[i][1]].innerHTML === gameboard.TicTacToeArray[gameboard.possibleWins[i][2]].innerHTML){
         console.log(`VICTORY OMG`);
-        const victoryAnnouncement = document.createElement("div")
+        const victoryAnnouncement = document.createElement("div");
         victoryAnnouncement.classList += 'victory';
         victoryDiv.appendChild(victoryAnnouncement);
         console.log(victoryDiv);
         console.log(typeof(victoryDiv));
-        
-        
         console.log(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML)
         if(gameboard.TicTacToeArray[gameboard.possibleWins[i][0]].innerHTML === player1.mark){
           victoryAnnouncement.innerHTML = `Player ${player1.mark} wins!`;
+          victoryAnnouncement.classList.add('player1');
         }
         else{
           victoryAnnouncement.innerHTML = `Player ${player2.mark} wins!`;
+          victoryAnnouncement.classList.add('player2');
         }
         lockout();
+        return;
       }
     }
     //check for tie
     let tie = true;
     gameboard.TicTacToeArray.forEach(function(element) {
-      if (element.innerHTML === '')
+      if (element.innerHTML == '')
         tie = false;
     });
     if(tie){
-      alert(`TIE`);
-      gameboard.reset();
+      const victoryAnnouncement = document.createElement("div");
+      victoryAnnouncement.classList += 'victory';
+      victoryAnnouncement.innerHTML = `It's a tie!`;
+      victoryAnnouncement.style.fontSize = '50px';
+      victoryDiv.appendChild(victoryAnnouncement);
+      lockout();
     }
     return;
   }

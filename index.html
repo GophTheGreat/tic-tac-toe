@@ -8,38 +8,32 @@
   <title>Document</title>
 </head>
 <body>
-  <div>
-    <div>
-      <div class="precontainer">
-        <form>
-          <label for="player1icon">Player 1 Icon</label>
-          <input id="p1" name="player1icon" type="text" value="X">
-        </form>
-        <form>
-          <label for="player2icon">Player 2 Icon</label>
-          <input id="p2" name="player2icon" type="text" value="O">
-        </form>
-        <button id="startButton">Start!</button>
-      </div>
-      
-      <div></div>
+  <div class="preContainer">
+    <div class="formContainer">
+      <form>
+        <label for="player1icon">Player 1 Icon</label>
+        <input id="p1" name="player1icon" type="text" value="X" maxlength="1">
+      </form>
+      <form>
+        <label for="player2icon">Player 2 Icon</label>
+        <input id="p2" name="player2icon" type="text" value="O" maxlength="1">
+      </form>
     </div>
-    <div class="gridContainer">
-      <div class='cell' id="a1"></div>
-      <div class='cell' id="a2"></div>
-      <div class='cell' id="a3"></div>
-      <div class='cell' id="a4"></div>
-      <div class='cell' id="a5"></div>
-      <div class='cell' id="a6"></div>
-      <div class='cell' id="a7"></div>
-      <div class='cell' id="a8"></div>
-      <div class='cell' id="a9"></div>
-    </div>
-    <div id="victoryContainer">
-      
-    </div>
-    <div></div>
-    <div></div>
+
+    <button id="startButton">Start!</button>
+  </div>
+  <div class="gridContainer">
+    <div class='cell' id="a1"></div>
+    <div class='cell' id="a2"></div>
+    <div class='cell' id="a3"></div>
+    <div class='cell' id="a4"></div>
+    <div class='cell' id="a5"></div>
+    <div class='cell' id="a6"></div>
+    <div class='cell' id="a7"></div>
+    <div class='cell' id="a8"></div>
+    <div class='cell' id="a9"></div>
+  </div>
+  <div id="victoryContainer">
   </div>
 </body>
 <script src="script.js"></script>
